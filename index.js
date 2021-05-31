@@ -1,15 +1,16 @@
+require('dotenv').config();
 const Discord = require("discord.js");
-const client = new Discord.Client();
+const bot = new Discord.Client();
 
+const TOKEN = process.env.TOKEN;
+bot.login(TOKEN);
 
-client.on("ready", () => {
-    console.log('Logged in as ${client.user.tag}!')
+bot.on("ready", () => {
+    console.log(`Logged in as ${bot.user.tag}!`)
 });
 
-client.on("message", msg => {
+bot.on("message", msg => {
     if (msg.content === "ping") {
         msg.reply("pong");
     }
 });
-
-client.login(process.env.TOKEN);
