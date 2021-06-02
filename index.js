@@ -30,6 +30,14 @@ let player = {
 
 bot.on("message", msg => {
     if (msg.content.charAt(0) === COMMAND) {
-        msg.reply("noot noot");
+        switch (msg.content) {
+            case COMMAND + "test":
+                msg.channel.send('test');
+                break;
+            case COMMAND + "greet":
+                msg.channel.send('Hello!');
+                break;
+        }
+        // msg.reply("noot noot");
     }
 });
