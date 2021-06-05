@@ -29,19 +29,19 @@ let enemy = {
     encounter: 'Your party tracks down the nest of a large dragon. It shrieks as it rears its head towards you. It\'s going to attack!',
     defeat: 'With a final growl, the defeated dragon collapses onto the ground.',
     // Messages that are printed when enemy's health falls below certain percentages
-    sub50: ['Blood runs down the dragon\'s scaly hide. The dragon gives a terrifying roar.', false]
-  }
+    sub50: ['Blood runs down the dragon\'s scaly hide. The dragon gives a terrifying roar.', false],
+  },
 };
 
 let player = {
   name: 'Hero',
   hp: 100,
   atk: 20,
-  def: 7
+  def: 7,
 };
 
 let fightInfo = {
-  startingEnemyHp: enemy.hp
+  startingEnemyHp: enemy.hp,
 };
 
 // Command that begins fight
