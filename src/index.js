@@ -46,7 +46,7 @@ let enemy = {
 let player = {
   name: 'Hero',
   hp: 100,
-  atk: 90,
+  atk: 20,
   def: 7,
 };
 
