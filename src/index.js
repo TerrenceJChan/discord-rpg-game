@@ -6,14 +6,14 @@ dotenv.config();
 const bot = new Discord.Client();
 
 const {
-  TOKEN,
-  COMMAND_PREFIX: COMMAND = '!',
+    TOKEN,
+    COMMAND_PREFIX: COMMAND = '!',
 } = process.env;
 
 bot.login(TOKEN);
 
 bot.on('ready', () => {
-  console.log(`Logged in as ${bot.user.tag}!`);
+    console.log(`Logged in as ${bot.user.tag}!`);
 });
 
 // Global variables
@@ -21,38 +21,50 @@ let fightState = false;
 
 // Testing objects for enemy and player
 let enemy = {
-  name: 'The dragon',
-  hp: 100,
-  atk: 10,
-  def: 5,
-  attacks: new Map([
-    [{ message: 'The dragon breathes devastating fire!', multiplier: 2 }, 1],
-    [{ message: 'The dragon takes a swipe with its razor sharp claws.', multiplier: 1 }, 5],
-    [{ message: 'The dragon bites with its terrifying jaws.', multiplier: 1.5 }, 2],
-  ]),
-  msgs: {
-    encounter: 'Your party tracks down the nest of a large dragon. It shrieks as it rears its head towards you. It\'s going to attack!',
-    defeat: 'With a final growl, the defeated dragon collapses onto the ground.',
-    // Messages that are printed when enemy's health falls below certain percentages
-    sub50: ['Blood runs down the dragon\'s scaly hide. The dragon gives a terrifying roar.', false],
-  },
+    name: 'The dragon',
+    hp: 100,
+    atk: 10,
+    def: 5,
+    attacks: new Map([
+        [{ message: 'The dragon breathes devastating fire!', multiplier: 2 }, 1],
+        [{ message: 'The dragon takes a swipe with its razor sharp claws.', multiplier: 1 }, 5],
+        [{ message: 'The dragon bites with its terrifying jaws.', multiplier: 1.5 }, 2],
+    ]),
+    drops: new Map([
+        [{ mat: 'Dragon Hide' }, 3],
+        [{ mat: 'Dragon Talon' }, 2],
+        [{ mat: 'Dragon Fang' }, 1],
+    ]),
+    msgs: {
+        encounter: 'Your party tracks down the nest of a large dragon. It shrieks as it rears its head towards you. It\'s going to attack!',
+        defeat: 'With a final growl, the defeated dragon collapses onto the ground.',
+        // Messages that are printed when enemy's health falls below certain percentages
+        sub50: ['Blood runs down the dragon\'s scaly hide. The dragon gives a terrifying roar.', false],
+    },
 };
 
 let player = {
-  name: 'Hero',
-  hp: 100,
-  atk: 20,
-  def: 7,
+    name: 'Hero',
+    hp: 100,
+    atk: 90,
+    def: 7,
 };
 
 let fightInfo = {
-  startingEnemyHp: enemy.hp,
+    startingEnemyHp: enemy.hp,
 };
 
+let inventory = [];
+
 // Command that begins fight
+
+const checkInv = () => {
+    return inventory;
+}
+
 const hunt = () => {
-  fightState = true;
-  return enemy.msgs.encounter;
+    fightState = true;
+    return enemy.msgs.encounter;
 };
 
 /**
@@ -85,82 +97,96 @@ const sum = (list) => list.reduce((total, value) => total + value, 0);
  * @returns {T} One of the options, chosen randomly
  */
 const chooseWeighted = (options) => {
-  const totalWeight = sum([...options.values()]);
-  let which = irandomRange(1, totalWeight);
-  for (const [item, weight] of options) {
-    which -= weight;
-    if (which <= 0) { return item; }
-  }
+    const totalWeight = sum([...options.values()]);
+    let which = irandomRange(1, totalWeight);
+    for (const [item, weight] of options) {
+        which -= weight;
+        if (which <= 0) { return item; }
+    }
 };
+
+const addItem = (drop) => {
+    let result = inventory.find(loot => loot.mat === drop.mat)
+    if (result) {
+        result.quantity += 1;
+    } else {
+        inventory.push({ 'mat': drop.mat, 'quantity': 1 });
+    }
+}
 
 // Command that calculates the damage and consequences between the enemy and player
 const attack = () => {
-  let enemyDamage = Math.floor((player.atk * random20()) - (enemy.def * random20()));
-  console.log(enemyDamage);
-  if (enemyDamage < 0) {
-    enemyDamage = 0;
-  }
-
-  const enemyAttack = chooseWeighted(enemy.attacks);
-
-  let playerDamage = Math.floor((enemy.atk * enemyAttack.multiplier * random20()) - (player.def * random20()));
-  console.log(playerDamage);
-  if (playerDamage < 0) {
-    playerDamage = 0;
-  }
-
-  enemy.hp -= enemyDamage;
-  player.hp -= playerDamage;
-
-  // Generic combat results message to be displayed after each attack
-  let genericMsg = `${player.name} slashes ${enemy.name} for ${enemyDamage} damage! ${enemyAttack.message} ${enemy.name} deals ${playerDamage} damage!`;
-
-  // Describes what is happening in the fight
-  if (player.hp <= 0) {
-    return `${player.name} has taken too much damage and cannot carry on! ${player.name} retreats from the battle.`;
-  } else {
-    switch (true) {
-    case enemy.hp <= 0:
-      return genericMsg + ' ' + enemy.msgs.defeat;
-    case enemy.hp <= fightInfo.startingEnemyHp * 0.5 && enemy.msgs.sub50[1] === false:
-      enemy.msgs.sub50[1] = true;
-      return genericMsg + ' ' + enemy.msgs.sub50[0];
-    default:
-      return genericMsg;
+    let enemyDamage = Math.floor((player.atk * random20()) - (enemy.def * random20()));
+    if (enemyDamage < 0) {
+        enemyDamage = 0;
     }
-  }
+
+    const enemyAttack = chooseWeighted(enemy.attacks);
+
+    let playerDamage = Math.floor((enemy.atk * enemyAttack.multiplier * random20()) - (player.def * random20()));
+    if (playerDamage < 0) {
+        playerDamage = 0;
+    }
+
+    enemy.hp -= enemyDamage;
+    player.hp -= playerDamage;
+
+    // Generic combat results message to be displayed after each attack
+    let genericMsg = `${player.name} slashes ${enemy.name} for ${enemyDamage} damage! ${enemyAttack.message} ${enemy.name} deals ${playerDamage} damage!`;
+
+    // Describes what is happening in the fight
+    if (player.hp <= 0) {
+        return `${player.name} has taken too much damage and cannot carry on! ${player.name} retreats from the battle.`;
+    } else {
+        switch (true) {
+            case enemy.hp <= 0:
+                fightState = false;
+                const reward = chooseWeighted(enemy.drops);
+                addItem(reward);
+                console.log(inventory);
+                return (genericMsg + ' ' + enemy.msgs.defeat);
+            case enemy.hp <= fightInfo.startingEnemyHp * 0.5 && enemy.msgs.sub50[1] === false:
+                enemy.msgs.sub50[1] = true;
+                return (genericMsg + ' ' + enemy.msgs.sub50[0]);
+            default:
+                return (genericMsg);
+        }
+    }
 };
 
 // Command to check the enemy's remaining health
 const check = () => {
-  return `The ${enemy.name} has ${enemy.hp} health remaining.`;
+    return `The ${enemy.name} has ${enemy.hp} health remaining.`;
 };
 
 // Interprets the user's commands on Discord
 bot.on('message', msg => {
-  if (fightState === false) {
-    if (msg.content.charAt(0) === COMMAND) {
-      switch (msg.content) {
-      case COMMAND + 'hunt':
-        msg.channel.send(hunt());
-        break;
-      case COMMAND + 'greet':
-        msg.channel.send('Hello!');
-        break;
-      }
+    if (fightState === false) {
+        if (msg.content.charAt(0) === COMMAND) {
+            switch (msg.content) {
+                case COMMAND + 'inventory':
+                    msg.channel.send(checkInv());
+                    break;
+                case COMMAND + 'hunt':
+                    msg.channel.send(hunt());
+                    break;
+                case COMMAND + 'greet':
+                    msg.channel.send('Hello!');
+                    break;
+            }
+        }
+    } else {
+        if (msg.content.charAt(0) === COMMAND) {
+            switch (msg.content) {
+                case COMMAND + 'attack':
+                    msg.channel.send(attack());
+                    break;
+                case COMMAND + 'check':
+                    msg.channel.send(check());
+                    break;
+            }
+        }
     }
-  } else {
-    if (msg.content.charAt(0) === COMMAND) {
-      switch (msg.content) {
-      case COMMAND + 'attack':
-        msg.channel.send(attack());
-        break;
-      case COMMAND + 'check':
-        msg.channel.send(check());
-        break;
-      }
-    }
-  }
 });
 
 // msg.reply("noot noot");
