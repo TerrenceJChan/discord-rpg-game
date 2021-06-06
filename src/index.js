@@ -97,7 +97,7 @@ const random20 = () => 1 + irandomRange(-20, 20) / 100;
 const sum = (list) => list.reduce((total, value) => total + value, 0);
 
 /**
- * @param {object} options A map of options to their weight
+ * @param {Map<T, number>} options A map of options to their weight
  * @returns {T} One of the options, chosen randomly
  */
 const chooseWeighted = (options) => {
