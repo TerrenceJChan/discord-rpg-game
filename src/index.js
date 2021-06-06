@@ -7,6 +7,7 @@ const bot = new Discord.Client();
 
 const {
   TOKEN,
+  MESSAGE_TIMEOUT = 5000,
   COMMAND_PREFIX: COMMAND = '!',
 } = process.env;
 
@@ -137,28 +138,31 @@ const check = () => {
 };
 
 // Interprets the user's commands on Discord
-bot.on('message', msg => {
+let messageAt = 0;
+bot.on('message', (msg) => {
+  if (!msg.content.startsWith(COMMAND)) { return; }
+  if (Date.now() - messageAt < MESSAGE_TIMEOUT) {
+    msg.channel.send('Spam prevented.');
+    return;
+  }
+  messageAt = Date.now();
   if (fightState === false) {
-    if (msg.content.charAt(0) === COMMAND) {
-      switch (msg.content) {
-      case COMMAND + 'hunt':
-        msg.channel.send(hunt());
-        break;
-      case COMMAND + 'greet':
-        msg.channel.send('Hello!');
-        break;
-      }
+    switch (msg.content) {
+    case COMMAND + 'hunt':
+      msg.channel.send(hunt());
+      break;
+    case COMMAND + 'greet':
+      msg.channel.send('Hello!');
+      break;
     }
   } else {
-    if (msg.content.charAt(0) === COMMAND) {
-      switch (msg.content) {
-      case COMMAND + 'attack':
-        msg.channel.send(attack());
-        break;
-      case COMMAND + 'check':
-        msg.channel.send(check());
-        break;
-      }
+    switch (msg.content) {
+    case COMMAND + 'attack':
+      msg.channel.send(attack());
+      break;
+    case COMMAND + 'check':
+      msg.channel.send(check());
+      break;
     }
   }
 });
