@@ -23,11 +23,12 @@ let fightState = false;
 let enemy = {
   name: 'The dragon',
   hp: 100,
+  atk: 10,
   def: 5,
   attacks: new Map([
-    [{ message: 'The dragon breathes devastating fire!', atk: 15 }, 1],
-    [{ message: 'The dragon takes a swipe with its razor sharp claws.', atk: 10 }, 5],
-    [{ message: 'The dragon bites with its terrifying jaws.', atk: 12 }, 2],
+    [{ message: 'The dragon breathes devastating fire!', multiplier: 2 }, 1],
+    [{ message: 'The dragon takes a swipe with its razor sharp claws.', multiplier: 1 }, 5],
+    [{ message: 'The dragon bites with its terrifying jaws.', multiplier: 1.5 }, 2],
   ]),
   msgs: {
     encounter: 'Your party tracks down the nest of a large dragon. It shrieks as it rears its head towards you. It\'s going to attack!',
@@ -102,7 +103,7 @@ const attack = () => {
 
   const enemyAttack = chooseWeighted(enemy.attacks);
 
-  let playerDamage = Math.floor((enemyAttack.atk * random20()) - (player.def * random20()));
+  let playerDamage = Math.floor((enemy.atk * enemyAttack.multiplier * random20()) - (player.def * random20()));
   console.log(playerDamage);
   if (playerDamage < 0) {
     playerDamage = 0;
