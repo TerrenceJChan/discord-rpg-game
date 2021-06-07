@@ -31,6 +31,11 @@ let enemy = {
     [{ message: 'The dragon takes a swipe with its razor sharp claws.', multiplier: 1 }, 5],
     [{ message: 'The dragon bites with its terrifying jaws.', multiplier: 1.5 }, 2],
   ]),
+  drops: new Map([
+    [{ mat: 'Dragon Hide' }, 3],
+    [{ mat: 'Dragon Talon' }, 2],
+    [{ mat: 'Dragon Fang' }, 1],
+  ]),
   msgs: {
     encounter: 'Your party tracks down the nest of a large dragon. It shrieks as it rears its head towards you. It\'s going to attack!',
     defeat: 'With a final growl, the defeated dragon collapses onto the ground.',
@@ -50,7 +55,18 @@ let fightInfo = {
   startingEnemyHp: enemy.hp,
 };
 
+let inventory = [];
+
 // Command that begins fight
+
+const checkInv = () => {
+  let message = '';
+  for (let i = 0; i < inventory.length; i++) {
+    message += inventory[i].mat + ' | ' + inventory[i].quantity + '\n';
+  }
+  return message;
+};
+
 const hunt = () => {
   fightState = true;
   return enemy.msgs.encounter;
@@ -94,10 +110,22 @@ const chooseWeighted = (options) => {
   }
 };
 
+/**
+ * @param {object} drop An item to be added to the player's inventory
+ * @param {string} drop.mat The item's name
+ */
+const addItem = (drop) => {
+  let result = inventory.find(loot => loot.mat === drop.mat);
+  if (result) {
+    result.quantity += 1;
+  } else {
+    inventory.push({ mat: drop.mat, quantity: 1 });
+  }
+};
+
 // Command that calculates the damage and consequences between the enemy and player
 const attack = () => {
   let enemyDamage = Math.floor((player.atk * random20()) - (enemy.def * random20()));
-  console.log(enemyDamage);
   if (enemyDamage < 0) {
     enemyDamage = 0;
   }
@@ -105,7 +133,6 @@ const attack = () => {
   const enemyAttack = chooseWeighted(enemy.attacks);
 
   let playerDamage = Math.floor((enemy.atk * enemyAttack.multiplier * random20()) - (player.def * random20()));
-  console.log(playerDamage);
   if (playerDamage < 0) {
     playerDamage = 0;
   }
@@ -121,13 +148,20 @@ const attack = () => {
     return `${player.name} has taken too much damage and cannot carry on! ${player.name} retreats from the battle.`;
   } else {
     switch (true) {
-    case enemy.hp <= 0:
-      return genericMsg + ' ' + enemy.msgs.defeat;
-    case enemy.hp <= fightInfo.startingEnemyHp * 0.5 && enemy.msgs.sub50[1] === false:
+    case enemy.hp <= 0: {
+      fightState = false;
+      const reward = chooseWeighted(enemy.drops);
+      addItem(reward);
+      console.log(inventory);
+      return (genericMsg + ' ' + enemy.msgs.defeat + '\n\n' + `You collect one <${reward.mat}> and place it in your inventory.`);
+    }
+    case enemy.hp <= fightInfo.startingEnemyHp * 0.5 && enemy.msgs.sub50[1] === false: {
       enemy.msgs.sub50[1] = true;
-      return genericMsg + ' ' + enemy.msgs.sub50[0];
-    default:
-      return genericMsg;
+      return (genericMsg + ' ' + enemy.msgs.sub50[0]);
+    }
+    default: {
+      return (genericMsg);
+    }
     }
   }
 };
@@ -148,12 +182,18 @@ bot.on('message', (msg) => {
   messageAt = Date.now();
   if (fightState === false) {
     switch (msg.content) {
-    case COMMAND + 'hunt':
+    case COMMAND + 'inventory': {
+      msg.channel.send(checkInv());
+      break;
+    }
+    case COMMAND + 'hunt': {
       msg.channel.send(hunt());
       break;
-    case COMMAND + 'greet':
+    }
+    case COMMAND + 'greet': {
       msg.channel.send('Hello!');
       break;
+    }
     }
   } else {
     switch (msg.content) {
