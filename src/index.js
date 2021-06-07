@@ -111,7 +111,7 @@ const chooseWeighted = (options) => {
 };
 
 /**
- * @param {Object} drop An item to be added to the player's inventory
+ * @param {object} drop An item to be added to the player's inventory
  * @param {string} drop.mat The item's name
  */
 const addItem = (drop) => {
