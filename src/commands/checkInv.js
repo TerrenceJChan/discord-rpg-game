@@ -1,5 +1,5 @@
-export const checkInv = (ctx) => {
-  if (ctx.inventory.length === 0) {
+export const checkInv = ({ inventory }) => {
+  if (inventory.length === 0) {
     return 'Your inventory is empty!';
   }
   let message = '';
