@@ -37,9 +37,9 @@ const ctx = {
 const TOWN_COMMANDS = {
   greet,
 
-  inventory: () => checkInv(ctx),
+  inventory: checkInv,
 
-  hunt: () => hunt(ctx),
+  hunt,
 };
 
 const FIGHT_COMMANDS = {
