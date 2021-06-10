@@ -27,7 +27,7 @@ const ctx = {
   player: {
     name: 'Hero',
     hp: 100,
-    atk: 50,
+    atk: 20,
     def: 7,
   },
   enemy: null,
@@ -86,7 +86,7 @@ bot.on('message', (msg) => {
       return;
     }
   }
-  const response = commandHandler();
+  const response = commandHandler(ctx);
   msg.channel.send(response);
 });
 
