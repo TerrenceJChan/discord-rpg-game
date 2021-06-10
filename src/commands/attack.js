@@ -22,7 +22,7 @@ export const attack = (ctx) => {
 
   const enemyAttack = chooseWeighted(enemy.attacks);
 
-  let playerDamage = Math.floor((enemy.atk * enemyAttack.multiplier * random20()) - (ctx.player.def * random20()));
+  let playerDamage = Math.floor((enemy.atk * enemyAttack.multiplier * random20()) - (player.def * random20()));
   if (playerDamage < 0) {
     playerDamage = 0;
   }
