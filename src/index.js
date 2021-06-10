@@ -27,7 +27,7 @@ const ctx = {
   player: {
     name: 'Hero',
     hp: 100,
-    atk: 20,
+    atk: 50,
     def: 7,
   },
   enemy: null,

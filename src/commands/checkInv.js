@@ -3,7 +3,7 @@ export const checkInv = ({ inventory }) => {
     return 'Your inventory is empty!';
   }
   let message = '';
-  for (const item of ctx.inventory) {
+  for (const item of inventory) {
     message += `${item.mat} | ${item.quantity} \n`;
   }
   return message;

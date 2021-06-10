@@ -14,7 +14,7 @@ const addItem = (drop, ctx) => {
 };
 
 export const attack = (ctx) => {
-  const { player, inventory, enemy } = ctx;
+  const { player, enemy } = ctx;
   let enemyDamage = Math.floor((player.atk * random20()) - (enemy.def * random20()));
   if (enemyDamage < 0) {
     enemyDamage = 0;
