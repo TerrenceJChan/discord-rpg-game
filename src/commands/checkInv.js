@@ -1,4 +1,4 @@
-export const checkInv = (inventory) => {
+export const checkInv = ({ inventory }) => {
   if (inventory.length === 0) {
     return 'Your inventory is empty!';
   }

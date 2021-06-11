@@ -13,7 +13,8 @@ const addItem = (drop, inventory) => {
   }
 };
 
-export const attack = (player, enemy, inventory) => {
+export const attack = (ctx) => {
+  const { player, inventory, enemy } = ctx;
   let enemyDamage = Math.floor((player.atk * random20()) - (enemy.def * random20()));
   if (enemyDamage < 0) {
     enemyDamage = 0;
@@ -40,7 +41,9 @@ export const attack = (player, enemy, inventory) => {
     case enemy.hp <= 0: {
       const reward = chooseWeighted(enemy.drops);
       addItem(reward, inventory);
-      return (genericMsg + ' ' + enemy.msgs.defeat + '\n\n' + `You collect one <${reward.mat}> and place it in your inventory.`);
+      const victoryMessage = `${genericMsg} ${enemy.msgs.defeat}\n\nYou collect one <${reward.mat}> and place it in your inventory.`;
+      ctx.enemy = null;
+      return victoryMessage;
     }
     case enemy.hp <= enemy.maxhp * 0.5 && enemy.msgs.sub50[1] === false: {
       enemy.msgs.sub50[1] = true;

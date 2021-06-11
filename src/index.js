@@ -23,39 +23,29 @@ bot.on('ready', () => {
   console.log(`Logged in as ${bot.user.tag}!`);
 });
 
-// Testing objects for enemy and player
-let enemy;
-
-let player = {
-  name: 'Hero',
-  hp: 100,
-  atk: 20,
-  def: 7,
+const ctx = {
+  player: {
+    name: 'Hero',
+    hp: 100,
+    atk: 50,
+    def: 7,
+  },
+  enemy: null,
+  inventory: [],
 };
 
-let inventory = [];
-
 const TOWN_COMMANDS = {
-  inventory: () => checkInv(inventory),
-
   greet,
 
-  hunt: () => {
-    enemy = hunt();
-    return enemy.msgs.encounter;
-  },
+  inventory: checkInv,
+
+  hunt,
 };
 
 const FIGHT_COMMANDS = {
-  attack: () => {
-    const response = attack(player, enemy, inventory);
-    if (enemy.hp <= 0) {
-      enemy = null;
-    }
-    return response;
-  },
+  attack,
 
-  check: () => check(enemy),
+  check,
 };
 
 const ALL_COMMANDS = new Set([
@@ -66,20 +56,24 @@ const ALL_COMMANDS = new Set([
 // Interprets the user's commands on Discord
 let messageAt = 0;
 bot.on('message', (msg) => {
+  // Bot sends nothing if user sends a non-command
   if (!msg.content.startsWith(COMMAND_PREFIX)) { return; }
+  // Spam prevention
   if (Date.now() - messageAt < MESSAGE_TIMEOUT) {
     msg.channel.send('Spam prevented.');
     return;
   }
   messageAt = Date.now();
+  // "Removes" the COMMAND_PREFIX from the user's message
   const command = msg.content.slice(COMMAND_PREFIX.length);
+  // Rejects invalid command
   if (!ALL_COMMANDS.has(command)) {
     msg.channel.send(`Unknown command: ${command}`);
     return;
   }
-
+  // Handles valid command
   let commandHandler;
-  if (enemy) {
+  if (ctx.enemy) {
     commandHandler = FIGHT_COMMANDS[command];
     if (!commandHandler) {
       msg.channel.send('This command is not available during battle!');
@@ -92,8 +86,7 @@ bot.on('message', (msg) => {
       return;
     }
   }
-
-  const response = commandHandler(player, enemy, inventory);
+  const response = commandHandler(ctx);
   msg.channel.send(response);
 });
 
