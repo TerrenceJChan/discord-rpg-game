@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 import Discord from 'discord.js';
 
 import { greet } from './commands/greet.js';
+import {load} from './commands/load.js';
 import { attack } from './commands/attack.js';
 import { check } from './commands/check.js';
 import { checkInv } from './commands/checkInv.js';
@@ -24,18 +25,15 @@ bot.on('ready', () => {
 });
 
 const ctx = {
-  player: {
-    name: 'Hero',
-    hp: 100,
-    atk: 50,
-    def: 7,
-  },
+  player: null,
   enemy: null,
   inventory: [],
 };
 
 const TOWN_COMMANDS = {
   greet,
+
+  load,
 
   inventory: checkInv,
 
@@ -73,7 +71,7 @@ bot.on('message', (msg) => {
   }
   // Handles valid command
   let commandHandler;
-  if (ctx.enemy) {
+  if (ctx.enemy && ctx.player) {
     commandHandler = FIGHT_COMMANDS[command];
     if (!commandHandler) {
       msg.channel.send('This command is not available during battle!');
