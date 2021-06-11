@@ -43,9 +43,9 @@ const TOWN_COMMANDS = {
 };
 
 const FIGHT_COMMANDS = {
-  attack: () => attack(ctx),
+  attack,
 
-  check: () => check(ctx),
+  check,
 };
 
 const ALL_COMMANDS = new Set([
