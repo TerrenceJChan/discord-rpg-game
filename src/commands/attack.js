@@ -4,17 +4,17 @@ import { random20, chooseWeighted } from '../utils/random.js';
 * @param {object} drop An item to be added to the player's inventory
 * @param {string} drop.mat The item's name
 */
-const addItem = (drop, ctx) => {
-  let result = ctx.inventory.find(loot => loot.mat === drop.mat);
+const addItem = (drop, inventory) => {
+  let result = inventory.find(loot => loot.mat === drop.mat);
   if (result) {
     result.quantity += 1;
   } else {
-    ctx.inventory.push({ mat: drop.mat, quantity: 1 });
+    inventory.push({ mat: drop.mat, quantity: 1 });
   }
 };
 
 export const attack = (ctx) => {
-  const { player, enemy } = ctx;
+  const { player, inventory, enemy } = ctx;
   let enemyDamage = Math.floor((player.atk * random20()) - (enemy.def * random20()));
   if (enemyDamage < 0) {
     enemyDamage = 0;
@@ -22,7 +22,7 @@ export const attack = (ctx) => {
 
   const enemyAttack = chooseWeighted(enemy.attacks);
 
-  let playerDamage = Math.floor((enemy.atk * enemyAttack.multiplier * random20()) - (ctx.player.def * random20()));
+  let playerDamage = Math.floor((enemy.atk * enemyAttack.multiplier * random20()) - (player.def * random20()));
   if (playerDamage < 0) {
     playerDamage = 0;
   }
@@ -40,7 +40,7 @@ export const attack = (ctx) => {
     switch (true) {
     case enemy.hp <= 0: {
       const reward = chooseWeighted(enemy.drops);
-      addItem(reward, ctx);
+      addItem(reward, inventory);
       const victoryMessage = `${genericMsg} ${enemy.msgs.defeat}\n\nYou collect one <${reward.mat}> and place it in your inventory.`;
       ctx.enemy = null;
       return victoryMessage;
