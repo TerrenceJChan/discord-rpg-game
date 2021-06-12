@@ -12,8 +12,13 @@ export default class Diskoard {
     this.handler = handler;
   }
 
+  async handle(event) {
+    /* TODO#19: make this method work according to spec */
+    this.handler(event);
+  }
+
   run(bot, onready) {
     bot.on('ready', onready);
-    bot.on('message', this.handler);
+    bot.on('message', (event) => this.handle(event));
   }
 }
