@@ -1,4 +1,5 @@
 import { random20, chooseWeighted } from '../utils/random.js';
+import {optionsMessage} from '../utils/optionsMessage.js'
 
 /**
 * @param {object} drop An item to be added to the player's inventory
@@ -38,20 +39,20 @@ export const attack = (ctx) => {
     return `${player.name} has taken too much damage and cannot carry on! ${player.name} retreats from the battle.`;
   } else {
     switch (true) {
-    case enemy.hp <= 0: {
-      const reward = chooseWeighted(enemy.drops);
-      addItem(reward, inventory);
-      const victoryMessage = `${genericMsg} ${enemy.msgs.defeat}\n\nYou collect one <${reward.mat}> and place it in your inventory.`;
-      ctx.enemy = null;
-      return victoryMessage;
-    }
-    case enemy.hp <= enemy.maxhp * 0.5 && enemy.msgs.sub50[1] === false: {
-      enemy.msgs.sub50[1] = true;
-      return (genericMsg + ' ' + enemy.msgs.sub50[0]);
-    }
-    default: {
-      return (genericMsg);
-    }
+      case enemy.hp <= 0: {
+        const reward = chooseWeighted(enemy.drops);
+        addItem(reward, inventory);
+        const victoryMessage = `${genericMsg} ${enemy.msgs.defeat}\n\nYou collect one <${reward.mat}> and place it in your inventory.`;
+        ctx.enemy = null;
+        return victoryMessage;
+      }
+      case enemy.hp <= enemy.maxhp * 0.5 && enemy.msgs.sub50[1] === false: {
+        enemy.msgs.sub50[1] = true;
+        return (`${genericMsg}  ${enemy.msgs.sub50[0]}\n\n${optionsMessage(ctx)}`);
+      }
+      default: {
+        return (`genericMsg\n\n${optionsMessage(ctx)}`);
+      }
     }
   }
 };

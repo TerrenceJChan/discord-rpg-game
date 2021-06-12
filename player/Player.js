@@ -5,5 +5,6 @@ export default class Player {
     this.atk = 50;
     this.def = 7;
     this.skills;
+    this.charge = 0;
   }
 }
