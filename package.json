@@ -7,7 +7,11 @@
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/.bin/jest",
     "start": "node src/index.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "fix": "eslint . --fix",
+    "db:migrate": "postgrator",
+    "db:setup": "./scripts/setup-database",
+    "db:reset": "./scripts/reset-database"
   },
   "repository": {
     "type": "git",
@@ -21,12 +25,15 @@
   "homepage": "https://github.com/TerrenceJChan/discord-rpg-experiment#readme",
   "dependencies": {
     "discord.js": "^12.5.3",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "pg": "^8.6.0"
   },
   "devDependencies": {
     "eslint": "^7.27.0",
     "eslint-plugin-jest": "^24.3.6",
-    "jest": "^27.0.4"
+    "jest": "^27.0.4",
+    "postgrator": "^4.1.1",
+    "postgrator-cli": "^4.0.0"
   },
   "engines": {
     "node": ">=14.16.0"

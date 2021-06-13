@@ -1,4 +1,5 @@
 import { random20, chooseWeighted } from '../utils/random.js';
+import { optionsMessage } from '../utils/optionsMessage.js';
 
 /**
 * @param {object} drop An item to be added to the player's inventory
@@ -13,9 +14,28 @@ const addItem = (drop, inventory) => {
   }
 };
 
-export const attack = (ctx) => {
+export const attack = (ctx, option) => {
   const { player, inventory, enemy } = ctx;
-  let enemyDamage = Math.floor((player.atk * random20()) - (enemy.def * random20()));
+  // Converts second argument into a number
+  if (!isNaN(option)) {
+    option = parseInt(option);
+  }
+  // We do not use !attack 0, so we do some math to change this. Also checks for valid input
+  if (Number.isInteger(option) && option > 0 && option <= player.skills.length) {
+    option -= 1;
+  } else if (Number.isInteger(option)) {
+    return 'Please enter a valid option!';
+  } else {
+    return 'Please select which attack to use!';
+  }
+  // Checks if the user has enough resources to use a skill
+  if (player.skills[option].charge < 0 && player.skills[option].charge + player.charge < 0) {
+    return `${player.name} does not have enough charges!`;
+  } else {
+    player.charge += player.skills[option].charge;
+  }
+
+  let enemyDamage = Math.floor((player.atk * player.skills[option].multiplier * random20()) - (enemy.def * random20()));
   if (enemyDamage < 0) {
     enemyDamage = 0;
   }
@@ -31,7 +51,7 @@ export const attack = (ctx) => {
   player.hp -= playerDamage;
 
   // Generic combat results message to be displayed after each attack
-  let genericMsg = `${player.name} slashes ${enemy.name} for ${enemyDamage} damage! ${enemyAttack.message} ${enemy.name} deals ${playerDamage} damage!`;
+  let genericMsg = `${player.name} ${player.skills[option].message}! They deal ${enemyDamage} damage. ${enemyAttack.message}! They deal ${playerDamage} damage!`;
 
   // Describes what is happening in the fight
   if (player.hp <= 0) {
@@ -47,10 +67,12 @@ export const attack = (ctx) => {
     }
     case enemy.hp <= enemy.maxhp * 0.5 && enemy.msgs.sub50[1] === false: {
       enemy.msgs.sub50[1] = true;
-      return (genericMsg + ' ' + enemy.msgs.sub50[0]);
+      return (`${genericMsg}  ${enemy.msgs.sub50[0]}
+        ${optionsMessage(ctx)}`);
     }
     default: {
-      return (genericMsg);
+      return (`${genericMsg}
+        ${optionsMessage(ctx)}`);
     }
     }
   }
