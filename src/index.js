@@ -71,7 +71,7 @@ app.use((msg) => {
       return;
     }
   } else {
-    commandHandler = TOWN_COMMANDS[command[0]];
+    commandHandler = TOWN_COMMANDS[command];
     if (!commandHandler) {
       msg.channel.send('This command is only available during battle!');
       return;
