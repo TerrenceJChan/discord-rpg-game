@@ -58,7 +58,7 @@ app.use((msg) => {
   // "Removes" the COMMAND_PREFIX from the user's message
   const [command, arg] = msg.content.slice(COMMAND_PREFIX.length).split(' ');
   // Rejects invalid command
-  if (!ALL_COMMANDS.has(command[0])) {
+  if (!ALL_COMMANDS.has(command)) {
     msg.channel.send(`Unknown command: ${command}`);
     return;
   }
