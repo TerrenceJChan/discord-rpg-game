@@ -89,5 +89,3 @@ app.run(bot, () => {
 });
 
 // msg.reply("noot noot");
-
-// msg.reply("noot noot");
