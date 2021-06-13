@@ -1,6 +1,6 @@
 export default class Dragon {
   constructor() {
-    this.name = 'The dragon';
+    this.name = 'Dragon';
     this.maxhp = 100;
     this.hp = 100;
     this.atk = 10;

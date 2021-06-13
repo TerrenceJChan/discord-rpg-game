@@ -16,19 +16,23 @@ const addItem = (drop, inventory) => {
 
 export const attack = (ctx, option) => {
   const { player, inventory, enemy } = ctx;
-  console.log(Number.isInteger(option));
   if (!isNaN(option)) {
     option = parseInt(option);
   }
   if (Number.isInteger(option) && option > 0 && option < 4) {
     option -= 1;
-    console.log(option);
+  } else if (Number.isInteger(option)) {
+    return 'Please enter a valid option!';
   } else {
-    console.log(option);
     return 'Please select which attack to use!';
   }
+  if (player.skills[option].charge < 0 && player.skills[option].charge + player.charge < 0) {
+    return `${player.name} does not have enough charges!`
+  } else {
+    player.charge += player.skills[option].charge;
+  }
 
-  let enemyDamage = Math.floor((player.atk * random20()) - (enemy.def * random20()));
+  let enemyDamage = Math.floor((player.atk * player.skills[option].multiplier * random20()) - (enemy.def * random20()));
   if (enemyDamage < 0) {
     enemyDamage = 0;
   }
@@ -44,7 +48,7 @@ export const attack = (ctx, option) => {
   player.hp -= playerDamage;
 
   // Generic combat results message to be displayed after each attack
-  let genericMsg = `${player.name} ${player.skills[option].message}! ${player.name} deals ${enemyDamage} damage. ${enemyAttack.message}! ${enemy.name} deals ${playerDamage} damage!`;
+  let genericMsg = `${player.name} ${player.skills[option].message}! They deal ${enemyDamage} damage. ${enemyAttack.message}! They deal ${playerDamage} damage!`;
 
   // Describes what is happening in the fight
   if (player.hp <= 0) {
