@@ -1,0 +1,15 @@
+#!/bin/bash
+createuser -eL rpg
+createuser -esP rpg-admin -g rpg
+createuser -eP rpg-server -g rpg
+
+createdb rpg
+
+here=$(dirname "$0")
+psql -d rpg -c '
+    SET ROLE "rpg-admin";
+    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, UPDATE, INSERT, DELETE ON TABLES TO rpg;
+    GRANT SELECT, UPDATE, INSERT, DELETE ON ALL TABLES IN SCHEMA public TO rpg;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE ON SEQUENCES TO rpg;
+    GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO rpg;
+';
