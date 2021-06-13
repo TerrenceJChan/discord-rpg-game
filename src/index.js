@@ -1,6 +1,9 @@
 // Intialize dependencies and bot
 import * as dotenv from 'dotenv';
+dotenv.config();
+
 import Discord from 'discord.js';
+import Diskoard from './diskoard/index.js';
 
 import { greet } from './commands/greet.js';
 import {load} from './commands/load.js';
@@ -9,20 +12,11 @@ import { check } from './commands/check.js';
 import { checkInv } from './commands/checkInv.js';
 import { hunt } from './commands/hunt.js';
 
-dotenv.config();
-const bot = new Discord.Client();
-
 const {
   TOKEN,
   MESSAGE_TIMEOUT = 5000,
   COMMAND_PREFIX = '!',
 } = process.env;
-
-bot.login(TOKEN);
-
-bot.on('ready', () => {
-  console.log(`Logged in as ${bot.user.tag}!`);
-});
 
 const ctx = {
   player: null,
@@ -49,7 +43,10 @@ const ALL_COMMANDS = new Set([
 
 // Interprets the user's commands on Discord
 let messageAt = 0;
-bot.on('message', (msg) => {
+
+const app = new Diskoard();
+
+app.use((msg) => {
   // Bot sends nothing if user sends a non-command
   if (!msg.content.startsWith(COMMAND_PREFIX)) { return; }
   // Spam prevention
