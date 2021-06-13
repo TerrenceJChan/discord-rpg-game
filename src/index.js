@@ -6,7 +6,7 @@ import Discord from 'discord.js';
 import Diskoard from './diskoard/index.js';
 
 import { greet } from './commands/greet.js';
-import {load} from './commands/load.js';
+import { load } from './commands/load.js';
 import { attack } from './commands/attack.js';
 import { check } from './commands/check.js';
 import { checkInv } from './commands/checkInv.js';
@@ -80,5 +80,14 @@ app.use((msg) => {
   const response = commandHandler(ctx, command[1]);
   msg.channel.send(response);
 });
+
+const bot = new Discord.Client();
+bot.login(TOKEN);
+
+app.run(bot, () => {
+  console.log(`Logged in as ${bot.user.tag}!`);
+});
+
+// msg.reply("noot noot");
 
 // msg.reply("noot noot");

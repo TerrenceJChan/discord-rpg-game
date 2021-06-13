@@ -34,7 +34,7 @@ export default class DragonsBite {
           multiplier: 4,
           charge: -5,
           cooldown: 150,
-          description: 'Deliver a series of powerful slashes. Consumes 4 charges.',
+          description: 'Deliver a series of powerful slashes. Consumes 5 charges.',
           message: 'roars as they deliver a devestating series of quick slashes',
         },
       ];
