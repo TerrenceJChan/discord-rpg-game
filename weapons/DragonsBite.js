@@ -19,7 +19,7 @@ export default class DragonsBite {
           charge: 1,
           cooldown: 100,
           description: 'Slash widely across your enemy. Gains 1 charge.',
-          message: 'swings the blade at',
+          message: 'swings their sword',
         },
         {
           skill: 'Heavy Slash',
@@ -27,7 +27,7 @@ export default class DragonsBite {
           charge: -2,
           cooldown: 130,
           description: 'Channel your strength to deliver a powerful slash. Consumes 2 charges.',
-          message: 'roars as they slash across',
+          message: 'delivers a powerful slash',
         },
         {
           skill: 'Fury Cuts',
@@ -35,7 +35,7 @@ export default class DragonsBite {
           charge: -5,
           cooldown: 150,
           description: 'Deliver a series of powerful slashes. Consumes 4 charges.',
-          message: 'roars as they deliver a devestating series of quick slashes at',
+          message: 'roars as they deliver a devestating series of quick slashes',
         },
       ];
   }

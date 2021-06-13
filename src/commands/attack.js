@@ -1,5 +1,5 @@
 import { random20, chooseWeighted } from '../utils/random.js';
-import {optionsMessage} from '../utils/optionsMessage.js'
+import { optionsMessage } from '../utils/optionsMessage.js'
 
 /**
 * @param {object} drop An item to be added to the player's inventory
@@ -14,8 +14,20 @@ const addItem = (drop, inventory) => {
   }
 };
 
-export const attack = (ctx) => {
+export const attack = (ctx, option) => {
   const { player, inventory, enemy } = ctx;
+  console.log(Number.isInteger(option));
+  if (!isNaN(option)) {
+    option = parseInt(option);
+  }
+  if (Number.isInteger(option) && option > 0 && option < 4) {
+    option -= 1;
+    console.log(option);
+  } else {
+    console.log(option);
+    return 'Please select which attack to use!';
+  }
+
   let enemyDamage = Math.floor((player.atk * random20()) - (enemy.def * random20()));
   if (enemyDamage < 0) {
     enemyDamage = 0;
@@ -32,7 +44,7 @@ export const attack = (ctx) => {
   player.hp -= playerDamage;
 
   // Generic combat results message to be displayed after each attack
-  let genericMsg = `${player.name} slashes ${enemy.name} for ${enemyDamage} damage! ${enemyAttack.message} ${enemy.name} deals ${playerDamage} damage!`;
+  let genericMsg = `${player.name} ${player.skills[option].message}! ${player.name} deals ${enemyDamage} damage. ${enemyAttack.message}! ${enemy.name} deals ${playerDamage} damage!`;
 
   // Describes what is happening in the fight
   if (player.hp <= 0) {

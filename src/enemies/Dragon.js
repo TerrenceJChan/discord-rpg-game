@@ -6,9 +6,9 @@ export default class Dragon {
     this.atk = 10;
     this.def = 5;
     this.attacks = new Map([
-      [{ message: 'The dragon breathes devastating fire!', multiplier: 2 }, 1],
-      [{ message: 'The dragon takes a swipe with its razor sharp claws.', multiplier: 1 }, 5],
-      [{ message: 'The dragon bites with its terrifying jaws.', multiplier: 1.5 }, 2],
+      [{ message: 'The dragon breathes devastating fire', multiplier: 2 }, 1],
+      [{ message: 'The dragon takes a swipe with its razor sharp claws', multiplier: 1 }, 5],
+      [{ message: 'The dragon bites with its terrifying jaws', multiplier: 1.5 }, 2],
     ]);
     this.drops = new Map([
       [{ mat: 'Dragon Hide' }, 3],
