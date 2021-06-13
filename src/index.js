@@ -6,6 +6,7 @@ import Discord from 'discord.js';
 import Diskoard from './diskoard/index.js';
 
 import { greet } from './commands/greet.js';
+import { load } from './commands/load.js';
 import { attack } from './commands/attack.js';
 import { check } from './commands/check.js';
 import { checkInv } from './commands/checkInv.js';
@@ -18,18 +19,14 @@ const {
 } = process.env;
 
 const ctx = {
-  player: {
-    name: 'Hero',
-    hp: 100,
-    atk: 50,
-    def: 7,
-  },
+  player: null,
   enemy: null,
   inventory: [],
 };
 
 const TOWN_COMMANDS = {
   greet,
+  load,
   inventory: checkInv,
   hunt,
 };
@@ -59,7 +56,7 @@ app.use((msg) => {
   }
   messageAt = Date.now();
   // "Removes" the COMMAND_PREFIX from the user's message
-  const command = msg.content.slice(COMMAND_PREFIX.length);
+  const [command, arg] = msg.content.slice(COMMAND_PREFIX.length).split(' ');
   // Rejects invalid command
   if (!ALL_COMMANDS.has(command)) {
     msg.channel.send(`Unknown command: ${command}`);
@@ -67,7 +64,7 @@ app.use((msg) => {
   }
   // Handles valid command
   let commandHandler;
-  if (ctx.enemy) {
+  if (ctx.enemy && ctx.player) {
     commandHandler = FIGHT_COMMANDS[command];
     if (!commandHandler) {
       msg.channel.send('This command is not available during battle!');
@@ -80,7 +77,7 @@ app.use((msg) => {
       return;
     }
   }
-  const response = commandHandler(ctx);
+  const response = commandHandler(ctx, arg);
   msg.channel.send(response);
 });
 
