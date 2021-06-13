@@ -26,8 +26,8 @@ describe('Diskoard', function () {
       app.use(middleware);
       app.use(handler);
       await app.handle({});
-      expect(middleware, 'middleware').toHaveBeenCalled();
-      expect(handler, 'handler').toHaveBeenCalled();
+      expect(middleware).toHaveBeenCalled();
+      expect(handler).toHaveBeenCalled();
     });
 
     it('should pass the same context argument to all chained middleware', async function () {
