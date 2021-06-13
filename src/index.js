@@ -77,7 +77,7 @@ app.use((msg) => {
       return;
     }
   }
-  const response = commandHandler(ctx, command[1]);
+  const response = commandHandler(ctx, arg);
   msg.channel.send(response);
 });
 
