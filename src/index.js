@@ -32,17 +32,13 @@ const ctx = {
 
 const TOWN_COMMANDS = {
   greet,
-
   load,
-
   inventory: checkInv,
-
   hunt,
 };
 
 const FIGHT_COMMANDS = {
   attack,
-
   check,
 };
 
@@ -63,28 +59,28 @@ bot.on('message', (msg) => {
   }
   messageAt = Date.now();
   // "Removes" the COMMAND_PREFIX from the user's message
-  const command = msg.content.slice(COMMAND_PREFIX.length);
+  const command = msg.content.slice(COMMAND_PREFIX.length).split(' ');
   // Rejects invalid command
-  if (!ALL_COMMANDS.has(command)) {
+  if (!ALL_COMMANDS.has(command[0])) {
     msg.channel.send(`Unknown command: ${command}`);
     return;
   }
   // Handles valid command
   let commandHandler;
   if (ctx.enemy && ctx.player) {
-    commandHandler = FIGHT_COMMANDS[command];
+    commandHandler = FIGHT_COMMANDS[command[0]];
     if (!commandHandler) {
       msg.channel.send('This command is not available during battle!');
       return;
     }
   } else {
-    commandHandler = TOWN_COMMANDS[command];
+    commandHandler = TOWN_COMMANDS[command[0]];
     if (!commandHandler) {
       msg.channel.send('This command is only available during battle!');
       return;
     }
   }
-  const response = commandHandler(ctx);
+  const response = commandHandler(ctx, command[1]);
   msg.channel.send(response);
 });
 

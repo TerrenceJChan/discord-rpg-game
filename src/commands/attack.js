@@ -48,10 +48,12 @@ export const attack = (ctx) => {
       }
       case enemy.hp <= enemy.maxhp * 0.5 && enemy.msgs.sub50[1] === false: {
         enemy.msgs.sub50[1] = true;
-        return (`${genericMsg}  ${enemy.msgs.sub50[0]}\n\n${optionsMessage(ctx)}`);
+        return (`${genericMsg}  ${enemy.msgs.sub50[0]}
+        ${optionsMessage(ctx)}`);
       }
       default: {
-        return (`genericMsg\n\n${optionsMessage(ctx)}`);
+        return (`${genericMsg}
+        ${optionsMessage(ctx)}`);
       }
     }
   }
