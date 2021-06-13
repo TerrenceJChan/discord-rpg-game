@@ -1,0 +1,6 @@
+#!/bin/bash
+psql -c 'DROP OWNED BY rpg'
+dropdb rpg
+dropuser rpg-admin
+dropuser rpg-server
+dropuser rpg

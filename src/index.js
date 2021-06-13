@@ -46,7 +46,7 @@ let messageAt = 0;
 
 const app = new Diskoard();
 
-app.use((msg) => {
+app.use(async (msg) => {
   // Bot sends nothing if user sends a non-command
   if (!msg.content.startsWith(COMMAND_PREFIX)) { return; }
   // Spam prevention
@@ -55,7 +55,7 @@ app.use((msg) => {
     return;
   }
   messageAt = Date.now();
-  // "Removes" the COMMAND_PREFIX from the user's message
+  // 'Removes' the COMMAND_PREFIX from the user's message
   const [command, arg] = msg.content.slice(COMMAND_PREFIX.length).split(' ');
   // Rejects invalid command
   if (!ALL_COMMANDS.has(command)) {
@@ -88,4 +88,4 @@ app.run(bot, () => {
   console.log(`Logged in as ${bot.user.tag}!`);
 });
 
-// msg.reply("noot noot");
+// msg.reply('noot noot');
