@@ -4,7 +4,7 @@ export default class Player {
     this.hp = 100;
     this.atk = 20;
     this.def = 7;
-    this.skills;
+    this.skills = [];
     this.charge = 0;
   }
 }
