@@ -18,13 +18,7 @@ module.exports = {
   },
   overrides: [{
     files: '*.spec.js',
-    plugins: [
-      'mocha',
-      'chai-friendly',
-    ],
-    extends: [
-      'plugin:mocha/recommended',
-      'plugin:chai-friendly/recommended',
-    ],
+    plugins: ['jest'],
+    extends: ['plugin:jest/recommended'],
   }],
 };
