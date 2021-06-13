@@ -5,7 +5,7 @@
 export const optionsMessage = ({ player }) => {
   const skillDescriptions = () => {
     let listOptions = '';
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < player.skills.length; i++) {
       let option = player.skills[i];
       listOptions += `
 **!attack ${i + 1}**
