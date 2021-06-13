@@ -21,7 +21,7 @@ export const attack = (ctx, option) => {
     option = parseInt(option);
   }
   // We do not use !attack 0, so we do some math to change this. Also checks for valid input
-  if (Number.isInteger(option) && option > 0 && option < 4) {
+  if (Number.isInteger(option) && option > 0 && option <= player.skills.length) {
     option -= 1;
   } else if (Number.isInteger(option)) {
     return 'Please enter a valid option!';
