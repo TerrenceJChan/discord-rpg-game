@@ -1,4 +1,3 @@
--- TODO:  SET up database
 CREATE TABLE players (id VARCHAR(20) PRIMARY KEY);
 CREATE TABLE characters (
     id SERIAL PRIMARY KEY,

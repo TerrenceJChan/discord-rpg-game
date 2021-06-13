@@ -1,4 +1,3 @@
--- TODO: unset up database
 ALTER TABLE players DROP COLUMN active_character;
 DROP TABLE hunt;
 DROP TABLE enemies;
