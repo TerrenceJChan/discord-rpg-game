@@ -65,7 +65,7 @@ app.use((msg) => {
   // Handles valid command
   let commandHandler;
   if (ctx.enemy && ctx.player) {
-    commandHandler = FIGHT_COMMANDS[command[0]];
+    commandHandler = FIGHT_COMMANDS[command];
     if (!commandHandler) {
       msg.channel.send('This command is not available during battle!');
       return;
