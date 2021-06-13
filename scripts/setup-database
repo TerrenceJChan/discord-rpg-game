@@ -5,7 +5,6 @@ createuser -eP rpg-server -g rpg
 
 createdb rpg
 
-here=$(dirname "$0")
 psql -d rpg -c '
     SET ROLE "rpg-admin";
     ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, UPDATE, INSERT, DELETE ON TABLES TO rpg;
