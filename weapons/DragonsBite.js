@@ -2,10 +2,10 @@ export default class DragonsBite {
   constructor() {
     this.name = 'Dragon\'s Bite';
     this.description = 'A long, curved blade fortified with the viciousness of a dragon\'s strike',
-      this.ingredients = new Map([
-        [{ mat: 'Dragon Talon' }, 2],
-        [{ mat: 'Dragon Fang' }, 1],
-      ]);
+    this.ingredients = new Map([
+      [{ mat: 'Dragon Talon' }, 2],
+      [{ mat: 'Dragon Fang' }, 1],
+    ]);
     this.base = {
       hp: 50,
       atk: 20,
