@@ -1,19 +1,4 @@
-import pg from 'pg';
-
-let pool;
-
-const getPool = () => {
-  if (!pool) {
-    pool = new pg.Pool({
-      user: process.env.DB_USER,
-      host: process.env.DB_HOST,
-      database: process.env.DB_DATABASE,
-      password: process.env.DB_PASSWORD,
-      port: process.env.DB_PORT,
-    });
-  }
-  return pool;
-};
+import { getPool } from './pool.js';
 
 export default async function connection(handler) {
   const pgclient = await getPool().connect();
@@ -34,14 +19,10 @@ export default async function connection(handler) {
     },
   };
   try {
-    await handler(client);
+    return await handler(client);
   } finally {
     pgclient.release();
   }
-}
-
-export function end() {
-  pool?.end();
 }
 
 /** Example

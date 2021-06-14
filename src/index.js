@@ -5,6 +5,7 @@ dotenv.config();
 import Discord from 'discord.js';
 import Diskoard from './diskoard/index.js';
 
+import { signup } from './commands/signup.js';
 import { greet } from './commands/greet.js';
 import { load } from './commands/load.js';
 import { attack } from './commands/attack.js';
@@ -18,13 +19,14 @@ const {
   COMMAND_PREFIX = '!',
 } = process.env;
 
-const ctx = {
+const GLOBAL_CTX = {
   player: null,
   enemy: null,
   inventory: [],
 };
 
 const TOWN_COMMANDS = {
+  signup,
   greet,
   load,
   inventory: checkInv,
@@ -64,7 +66,7 @@ app.use(async (msg) => {
   }
   // Handles valid command
   let commandHandler;
-  if (ctx.enemy && ctx.player) {
+  if (GLOBAL_CTX.enemy && GLOBAL_CTX.player) {
     commandHandler = FIGHT_COMMANDS[command];
     if (!commandHandler) {
       msg.channel.send('This command is not available during battle!');
@@ -77,7 +79,8 @@ app.use(async (msg) => {
       return;
     }
   }
-  const response = commandHandler(ctx, arg);
+  const ctx = { ...GLOBAL_CTX, msg };
+  const response = await commandHandler(ctx, arg);
   msg.channel.send(response);
 });
 
