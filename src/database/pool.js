@@ -15,4 +15,7 @@ export const getPool = () => {
   return pool;
 };
 
-export const end = () => pool?.end();
+export const end = () => {
+  pool?.end();
+  pool = undefined;
+};
