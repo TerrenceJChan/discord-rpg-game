@@ -1,10 +1,18 @@
-export default class Dragon {
-  constructor() {
-    this.name = 'Dragon';
-    this.maxhp = 100;
-    this.hp = 100;
-    this.atk = 10;
-    this.def = 5;
+import Enemy from '../models/Enemy.js';
+
+export default class Dragon extends Enemy {
+  constructor({
+    id,
+    type = 'Dragon',
+    name = 'Dragon',
+    maxhp = 100,
+    hp = 100,
+    atk = 10,
+    def = 5,
+  } = {}) {
+    super({ id, type, name, maxhp, hp, atk, def });
+
+    // TODO: convert these into methods somehow?
     this.attacks = new Map([
       [{ message: 'The dragon breathes devastating fire', multiplier: 2 }, 1],
       [{ message: 'The dragon takes a swipe with its razor sharp claws', multiplier: 1 }, 5],
@@ -23,3 +31,5 @@ export default class Dragon {
     };
   }
 }
+
+Enemy.declare({ Dragon });
