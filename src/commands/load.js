@@ -1,5 +1,5 @@
-import Player from '../../player/Player.js';
-import DragonsBite from '../../weapons/DragonsBite.js';
+import Player from '../player/Player.js';
+import DragonsBite from '../weapons/DragonsBite.js';
 
 export const load = (ctx) => {
   ctx.player = new Player;
