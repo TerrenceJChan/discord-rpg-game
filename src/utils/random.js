@@ -11,7 +11,7 @@ export const randomRange = (low, high) => Math.random() * (high - low) + low;
   * @returns {number} A random integer between low and high
   */
 export const irandomRange = (low, high) => Math.floor(randomRange(low, high + 1));
- 
+
 /**
  * @param {number[]} list A list of numbers
  * @returns {number} the sum of numbers in the list

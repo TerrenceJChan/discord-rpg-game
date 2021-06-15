@@ -15,5 +15,7 @@ module.exports = {
     semi: ['error', 'always'],
     'quote-props': ['error', 'as-needed'],
     'comma-dangle': ['error', 'always-multiline'],
+    'no-trailing-spaces': ['error'],
+    'eol-last': ['error', 'always'],
   },
 };
