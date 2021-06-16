@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
     "start": "node src/index.js",
     "lint": "eslint .",
     "fix": "eslint . --fix",
@@ -30,6 +30,8 @@
   },
   "devDependencies": {
     "eslint": "^7.27.0",
+    "eslint-plugin-jest": "^24.3.6",
+    "jest": "^27.0.4",
     "postgrator": "^4.1.1",
     "postgrator-cli": "^4.0.0"
   },
