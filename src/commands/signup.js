@@ -1,5 +1,5 @@
 import connection from '../database/connection.js';
-import Player from '../database/models/Player.js';
+import Player from '../models/Player.js';
 
 export const signup = (ctx) => connection(async (db) => {
   const { id } = ctx.msg.author;
