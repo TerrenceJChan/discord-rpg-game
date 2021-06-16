@@ -4,6 +4,6 @@
     "host": "localhost",
     "port": 5432,
     "database": "rpg",
-    "username": "rpg-admin",
-    "password": "horse"
+    "username": "rpg",
+    "password": "rpg"
 }
