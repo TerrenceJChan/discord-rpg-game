@@ -22,4 +22,18 @@ CREATE TABLE hunt (
     enemy_id INT NOT NULL references enemies(id) ON DELETE CASCADE,
     PRIMARY KEY(character_id, enemy_id)
 );
-ALTER TABLE players ADD COLUMN active_character INT REFERENCES characters(id) ON DELETE SET NULL;
+-- BlEH
+CREATE TYPE enum_material AS ENUM('Dragon Talon', 'Dragon Hide', 'Dragon Fang');
+CREATE TABLE materials (
+    quantity (int),
+    PRIMARY KEY(player_id, material_id)
+);
+CREATE TABLE equipment (
+    id SERIAL PRIMARY KEY,
+    player_id INT NOT NULL references players(id) ON DELETE CASCADE,
+    equipment_id INT NOT NULL references
+);
+-- BLEH
+ALTER TABLE players
+ADD COLUMN active_character INT REFERENCES characters(id) ON DELETE
+SET NULL;
