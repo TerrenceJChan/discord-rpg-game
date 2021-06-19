@@ -6,6 +6,7 @@ import Discord from 'discord.js';
 import Diskoard from './diskoard/index.js';
 
 import { signup } from './commands/signup.js';
+import { newchar } from './commands/newchar.js';
 import { greet } from './commands/greet.js';
 import { load } from './commands/load.js';
 import { attack } from './commands/attack.js';
@@ -26,6 +27,7 @@ const GLOBAL_CTX = {
 };
 
 const TOWN_COMMANDS = {
+  newchar,
   signup,
   greet,
   load,
@@ -79,9 +81,16 @@ app.use(async (msg) => {
       return;
     }
   }
+
   const ctx = { ...GLOBAL_CTX, msg };
   const response = await commandHandler(ctx, arg);
-  msg.channel.send(response);
+  GLOBAL_CTX.player = ctx.player;
+  GLOBAL_CTX.enemy = ctx.enemy;
+  GLOBAL_CTX.inventory = ctx.inventory;
+
+  if (response) {
+    msg.channel.send(response);
+  }
 });
 
 const bot = new Discord.Client();

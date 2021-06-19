@@ -1,5 +1,5 @@
 /**
-  * @param {object} player Contains the player's information
+  * @param {Character} player Contains the player's information
   * @returns {string} A message to display detailing possible user actions
   */
 export const optionsMessage = ({ player }) => {
