@@ -1,0 +1,42 @@
+name: Database CI
+on: push
+jobs:
+  migrations:
+    name: migrations
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_PASSWORD: rpg
+          POSTGRES_USER: rpg
+          POSTGRES_DB: rpg
+          DB_PORT: 5432
+        ports:
+          - 5432:5432
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Use Node.js 14
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14
+    - name: Cache node modules
+      uses: actions/cache@v2
+      env:
+        cache-name: node-modules
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+    - name: Install node modules
+      run: npm ci
+    - name: Create postgrator config
+      run: cp postgrator.sample.json postgrator.json
+    - name: Run migrations
+      run: npm run db:migrate
+    - name: Undo migrations
+      run: npm run db:migrate -- 0
