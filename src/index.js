@@ -1,9 +1,7 @@
-// Intialize dependencies and bot
-import * as dotenv from 'dotenv';
-dotenv.config();
-
 import Discord from 'discord.js';
 import Diskoard from './diskoard/index.js';
+
+import { TOKEN, MESSAGE_TIMEOUT, COMMAND_PREFIX } from './env';
 
 import { signup } from './commands/signup.js';
 import { newchar } from './commands/newchar.js';
@@ -13,12 +11,6 @@ import { attack } from './commands/attack.js';
 import { check } from './commands/check.js';
 import { checkInv } from './commands/checkInv.js';
 import { hunt } from './commands/hunt.js';
-
-const {
-  TOKEN,
-  MESSAGE_TIMEOUT = 5000,
-  COMMAND_PREFIX = '!',
-} = process.env;
 
 const GLOBAL_CTX = {
   player: null,

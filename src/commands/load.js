@@ -1,11 +1,7 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
-
 import { MessageEmbed } from 'discord.js';
+import { COMMAND_PREFIX } from '../env';
 import Player from '../models/Player.js';
 import connection from '../database/connection.js';
-
-const { COMMAND_PREFIX } = process.env;
 
 export const load = (ctx, name) => connection(async (db) => {
   const { id, username } = ctx.msg.author;
