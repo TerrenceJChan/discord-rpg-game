@@ -1,7 +1,7 @@
 import Discord from 'discord.js';
 import Diskoard from './diskoard/index.js';
 
-import { TOKEN, MESSAGE_TIMEOUT, COMMAND_PREFIX } from './env';
+import { TOKEN, MESSAGE_TIMEOUT, COMMAND_PREFIX } from './env.js';
 
 import { signup } from './commands/signup.js';
 import { newchar } from './commands/newchar.js';

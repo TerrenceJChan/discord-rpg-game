@@ -5,7 +5,7 @@ import {
   DB_DATABASE,
   DB_PASSWORD,
   DB_PORT,
-} from '../env';
+} from '../env.js';
 
 let pool;
 

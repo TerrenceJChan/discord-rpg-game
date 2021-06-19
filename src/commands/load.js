@@ -1,5 +1,5 @@
 import { MessageEmbed } from 'discord.js';
-import { COMMAND_PREFIX } from '../env';
+import { COMMAND_PREFIX } from '../env.js';
 import Player from '../models/Player.js';
 import connection from '../database/connection.js';
 

@@ -6,6 +6,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:node/recommended',
+    'plugin:import/recommended',
   ],
   parserOptions: {
     ecmaVersion: 12,
@@ -21,6 +22,7 @@ module.exports = {
     'no-trailing-spaces': ['error'],
     'eol-last': ['error', 'always'],
     'node/no-process-env': ['error'],
+    'import/extensions': ['error', 'always'],
   },
   overrides: [{
     files: '*.spec.js',
