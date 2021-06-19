@@ -8,6 +8,7 @@ dotenv.config();
  * @throws {Error} if a value could not be determined
  */
 const get = (name, fallback) => {
+  // eslint-disable-next-line node/no-process-env
   const value = process.env[name];
   if (!value && fallback === undefined) {
     throw new Error(`Environment variable ${name} must be provided.`);
