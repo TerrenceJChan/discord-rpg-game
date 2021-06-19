@@ -3,7 +3,11 @@ module.exports = {
     node: true,
     es2021: true,
   },
-  extends: 'eslint:recommended',
+  extends: [
+    'eslint:recommended',
+    'plugin:node/recommended',
+    'plugin:import/recommended',
+  ],
   parserOptions: {
     ecmaVersion: 12,
     sourceType: 'module',
@@ -17,10 +21,17 @@ module.exports = {
     'comma-dangle': ['error', 'always-multiline'],
     'no-trailing-spaces': ['error'],
     'eol-last': ['error', 'always'],
+    'node/no-process-env': ['error'],
+    'import/extensions': ['error', 'always'],
   },
   overrides: [{
     files: '*.spec.js',
     plugins: ['jest'],
     extends: ['plugin:jest/recommended'],
+    rules: {
+      'node/no-extraneous-import': ['error', {
+        allowModules: ['@jest/globals'],
+      }],
+    },
   }],
 };
