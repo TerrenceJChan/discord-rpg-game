@@ -1,18 +1,18 @@
 import { MessageEmbed } from 'discord.js';
-import { COMMAND_PREFIX } from '../env.js';
-import Player from '../models/Player.js';
 import Character from '../models/Character.js';
 import connection from '../database/connection.js';
+import currentPlayer from '../middleware/currentPlayer.js';
 
 export const newchar = (ctx, name) => connection(async (db) => {
-  const { id, username } = ctx.msg.author;
-  const player = await Player.load(id, db);
-  if (!player) {
-    return `You have not signed up. Please create an account with the \`${COMMAND_PREFIX}signup\` command.`;
+  const player = await currentPlayer(ctx, db);
+  const character = await player.loadActiveCharacter(db);
+  if (await character?.loadCurrentHunt(db)) {
+    throw new Error('You are currently on a hunt! It would be dangerous to do that right now.');
   }
+  const { username } = ctx.msg.author;
   try {
     const character = await Character.create({
-      player_id: id,
+      player_id: player.id,
       name,
     }, db);
     await player.setActiveCharacter(character.id, db);

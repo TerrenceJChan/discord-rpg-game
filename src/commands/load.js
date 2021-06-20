@@ -1,19 +1,19 @@
 import { MessageEmbed } from 'discord.js';
-import { COMMAND_PREFIX } from '../env.js';
-import Player from '../models/Player.js';
 import connection from '../database/connection.js';
+import currentPlayer from '../middleware/currentPlayer.js';
 
 export const load = (ctx, name) => connection(async (db) => {
-  const { id, username } = ctx.msg.author;
-  const player = await Player.load(id, db);
-  if (!player) {
-    return `You have not signed up. Please create an account with the \`${COMMAND_PREFIX}signup\` command.`;
+  const player = await currentPlayer(ctx, db);
+  const currentCharacter = await player.loadActiveCharacter(db);
+  if (await currentCharacter?.loadCurrentHunt(db)) {
+    throw new Error('You are currently on a hunt! It would be dangerous to do that right now.');
   }
+
   const character = await player.loadCharacter(name, db);
+  const { username } = ctx.msg.author;
   if (!character) {
     return `You do not have a character named ${name}.`;
   }
-  ctx.player = character; // TODO: take this line out, it's just so we can still run global enemy/hunt/attack stuff
   await player.setActiveCharacter(character.id, db);
   ctx.msg.channel.send(
     `Your active adventurer is now ${character.name}.`,

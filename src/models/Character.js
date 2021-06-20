@@ -1,4 +1,5 @@
 import DragonsBite from '../weapons/DragonsBite.js';
+import Hunt from './Hunt.js';
 
 export default class Character {
   static async create(
@@ -27,6 +28,12 @@ export default class Character {
     return new this(character);
   }
 
+  static async forPlayer(id, name, db) {
+    const { rows: [character] } = await db.sql`SELECT * FROM characters WHERE player_id = ${id} AND name = ${name}`;
+    if (!character) { return null; }
+    return new this(character);
+  }
+
   constructor({ id, player_id, name, atk, def, maxhp, hp, charge }) {
     this.id = id;
     this.player_id = player_id;
@@ -39,5 +46,28 @@ export default class Character {
 
     // TODO: implement these officially
     this.skills = new DragonsBite().skills;
+  }
+
+  async startHunt(enemy, db) {
+    await enemy.save(db);
+    return Hunt.create({
+      character_id: this.id,
+      enemy_id: enemy.id,
+    }, db);
+  }
+
+  async loadCurrentHunt(db) {
+    return Hunt.forCharacter(this.id, db);
+  }
+
+  async save(db) {
+    // Currently we only have changes to charge and HP... but we may need to extend
+    // this query for more attributes day
+    await db.sql`
+      UPDATE characters SET
+        charge = ${this.charge},
+        hp = ${this.hp}
+        WHERE id = ${this.id}
+    `;
   }
 }
