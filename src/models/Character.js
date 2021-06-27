@@ -1,3 +1,4 @@
+import { MessageEmbed } from 'discord.js';
 import DragonsBite from '../weapons/DragonsBite.js';
 import Hunt from './Hunt.js';
 
@@ -26,6 +27,11 @@ export default class Character {
     const { rows: [character] } = await db.sql`SELECT * FROM characters WHERE id = ${id}`;
     if (!character) { return null; }
     return new this(character);
+  }
+
+  static async loadAllForPlayer(playerId, db) {
+    const { rows: characters } = await db.sql`SELECT * FROM characters WHERE player_id = ${playerId}`;
+    return characters.map((character) => new this(character));
   }
 
   static async forPlayer(id, name, db) {
@@ -69,5 +75,19 @@ export default class Character {
         hp = ${this.hp}
         WHERE id = ${this.id}
     `;
+  }
+
+  print(ctx, message = '') {
+    ctx.msg.channel.send(
+      message,
+      {
+        embed: new MessageEmbed()
+          .setTitle(this.name)
+          .setAuthor(ctx.msg.author.username, ctx.msg.author.displayAvatarURL())
+          .addField('ATK', this.atk, true)
+          .addField('DEF', this.def, true)
+          .addField('HP', `${this.hp}/${this.maxhp}`, true),
+      },
+    );
   }
 }
