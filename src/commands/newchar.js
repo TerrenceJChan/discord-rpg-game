@@ -1,6 +1,6 @@
 import UniqueViolation from '../database/error/UniqueViolation.js';
-import Character from '../models/Character.js';
 import connection from '../database/connection.js';
+import Character from '../models/Character.js';
 import currentPlayer from '../middleware/currentPlayer.js';
 
 export const newchar = (ctx, name) => connection(async (db) => {
