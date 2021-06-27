@@ -1,4 +1,5 @@
 import { getPool } from './pool.js';
+import DatabaseError from './error/DatabaseError.js';
 
 export default async function connection(handler) {
   const pgclient = await getPool().connect();
@@ -6,7 +7,11 @@ export default async function connection(handler) {
   const client = {
     sql: async (strings, ...replacements) => {
       const query = strings.reduce((sql, segment, i) => `${sql}$${i}${segment}`);
-      return pgclient.query(query, replacements);
+      try {
+        return await pgclient.query(query, replacements);
+      } catch (error) {
+        throw DatabaseError.create(error);
+      }
     },
     transaction: async (callback) => {
       try {
