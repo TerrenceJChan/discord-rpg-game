@@ -1,3 +1,5 @@
+import { Client } from 'discord.js';
+
 /**
  * Koa-inspired middleware-based Discord bot interaction handler.
  *
@@ -17,8 +19,14 @@ export default class Diskoard {
     this.handler(event);
   }
 
+  login(token, onready) {
+    const bot = new Client();
+    bot.login(token);
+    this.run(bot, onready);
+  }
+
   run(bot, onready) {
-    bot.on('ready', onready);
+    bot.on('ready', () => onready(bot));
     bot.on('message', (event) => this.handle(event));
   }
 }

@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import Diskoard from './diskoard/index.js';
 
 import { TOKEN, MESSAGE_TIMEOUT, COMMAND_PREFIX } from './env.js';
@@ -65,10 +64,7 @@ app.use(async (msg) => {
   }
 });
 
-const bot = new Discord.Client();
-bot.login(TOKEN);
-
-app.run(bot, () => {
+app.login(TOKEN, (bot) => {
   console.log(`Logged in as ${bot.user.tag}!`);
 });
 
