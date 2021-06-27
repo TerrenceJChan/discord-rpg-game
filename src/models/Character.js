@@ -35,7 +35,7 @@ export default class Character {
   }
 
   static async forPlayer(id, name, db) {
-    const { rows: [character] } = await db.sql`SELECT * FROM characters WHERE player_id = ${id} AND name = ${name}`;
+    const { rows: [character] } = await db.sql`SELECT * FROM characters WHERE player_id = ${id} AND name ILIKE ${name}`;
     if (!character) { return null; }
     return new this(character);
   }
