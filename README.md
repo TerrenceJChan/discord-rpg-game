@@ -2,7 +2,7 @@
 
 Slayer of beasts, guardian of the last bastion of humanity, venture to the den of monsters and defeat the enemies of humankind!
 
-This is a text-based adventure RPG played on Discord, a free VoIP app. Individuals and groups of players craft and customize their characters to face-off against powerful enemies in turn-based combat.
+This is a text-based adventure RPG played on [Discord](https://discord.com/), a free VoIP app. Individuals and groups of players craft and customize their characters to face-off against powerful enemies in turn-based combat.
 
   - [Game Design](#game-design)
     + [Philosophy and Influences](#philosophy-and-influences)
@@ -38,9 +38,9 @@ Once a monster is slain, the participating players gain monster-specific craftin
 
 With new gear worn and in hand, players venture off to take on another battle!
 
-## Stacks Used
+## Stack Used
 
-This game is being developed using **Node.js** and **PostgreSQL**. The game is played over **Discord**, and it takes advantage of the npm package `discord.js` to allow the game's bot to describe the game world and interact with players.
+This game is being developed using [Node.js](https://nodejs.org/en/) and [PostgreSQL](https://www.postgresql.org/). The game is played over **Discord**, and it takes advantage of the [npm package](https://discord.js.org/#/) `discord.js` to allow the game's bot to describe the game world and interact with players.
 
 ## Contributors
 
