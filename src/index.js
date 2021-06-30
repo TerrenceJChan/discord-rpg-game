@@ -10,6 +10,8 @@ import { attack } from './commands/attack.js';
 import { check } from './commands/check.js';
 import { checkInv } from './commands/checkInv.js';
 import { hunt } from './commands/hunt.js';
+import { characters } from './commands/characters.js';
+import { character } from './commands/character.js';
 
 const GLOBAL_CTX = {
   inventory: [],
@@ -24,6 +26,8 @@ const COMMANDS = {
   hunt,
   attack,
   check,
+  characters,
+  character,
 };
 
 const ALL_COMMANDS = new Set(Object.keys(COMMANDS));
