@@ -23,9 +23,7 @@ export default class Player {
   }
 
   async loadCharacter(name, db) {
-    const { rows: [character] } = await db.sql`SELECT * FROM characters WHERE player_id = ${this.id} AND name = ${name}`;
-    if (!character) { return null; }
-    return new Character(character);
+    return Character.forPlayer(this.id, name, db);
   }
 
   async loadActiveCharacter(db) {

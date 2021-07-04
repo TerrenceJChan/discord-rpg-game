@@ -1,37 +1,26 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
-
-import { MessageEmbed } from 'discord.js';
-import Player from '../models/Player.js';
-import Character from '../models/Character.js';
+import UniqueViolation from '../database/error/UniqueViolation.js';
 import connection from '../database/connection.js';
-
-const { COMMAND_PREFIX } = process.env;
+import Character from '../models/Character.js';
+import currentPlayer from '../middleware/currentPlayer.js';
 
 export const newchar = (ctx, name) => connection(async (db) => {
-  const { id, username } = ctx.msg.author;
-  const player = await Player.load(id, db);
-  if (!player) {
-    return `You have not signed up. Please create an account with the \`${COMMAND_PREFIX}signup\` command.`;
+  const player = await currentPlayer(ctx, db);
+  const character = await player.loadActiveCharacter(db);
+  if (await character?.loadCurrentHunt(db)) {
+    throw new Error('You are currently on a hunt! It would be dangerous to do that right now.');
   }
   try {
     const character = await Character.create({
-      player_id: id,
+      player_id: player.id,
       name,
     }, db);
     await player.setActiveCharacter(character.id, db);
-    ctx.msg.channel.send(
-      `Your active adventurer is now ${character.name}.`,
-      {
-        embed: new MessageEmbed()
-          .setTitle(character.name)
-          .setAuthor(username, ctx.msg.author.displayAvatarURL())
-          .addField('ATK', character.atk, true)
-          .addField('DEF', character.def, true)
-          .addField('HP', `${character.hp}/${character.maxhp}`, true),
-      },
-    );
+    character.print(ctx, `Your active adventurer is now ${character.name}.`);
   } catch (error) {
+    if (error instanceof UniqueViolation) {
+      return `You already have a character named ${name}.`;
+    }
+    console.log(error);
     return `Failed to create a new character named ${name}: ${error}`;
   }
 });
