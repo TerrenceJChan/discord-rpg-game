@@ -11,8 +11,8 @@
     "lint": "eslint .",
     "fix": "eslint . --fix",
     "db:migrate": "postgrator",
-    "db:setup": "./scripts/setup-database",
-    "db:reset": "./scripts/reset-database"
+    "db:setup": "bash ./scripts/setup-database",
+    "db:reset": "bash ./scripts/reset-database"
   },
   "repository": {
     "type": "git",
