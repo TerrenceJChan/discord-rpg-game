@@ -1,7 +1,7 @@
 CREATE TYPE enum_material AS ENUM('Dragon Talon', 'Dragon Hide', 'Dragon Fang');
 CREATE TABLE materials (
     type enum_material NOT NULL,
-    quantity INT,
+    quantity INT NOT NULL,
     PRIMARY KEY(player_id, material_id)
 );
 CREATE TYPE enum_geartype AS ENUM('DragonsBite');
