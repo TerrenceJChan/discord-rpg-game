@@ -7,7 +7,7 @@ export default class Character {
     {
       player_id,
       name,
-      atk = 10,
+      atk = 25,
       def = 10,
       maxhp = 100,
       hp = maxhp,

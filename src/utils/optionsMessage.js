@@ -15,7 +15,7 @@ Description: ${option.description}
 `;
   }
   const message = `
-PLAYER! It is your turn to take an action. Your charge count is ${character.charge}.
+${character.name}! It is your turn to take an action. Your charge count is ${character.charge}.
 ${skillDescriptions}
     `;
   return message;
